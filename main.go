@@ -4,6 +4,8 @@ import (
     "fmt"
     "bufio"
     "os"
+    "net/http"
+    "io/ioutil"
 )
 
 type cliCommand struct {
@@ -27,6 +29,23 @@ func exitCallback() error {
     return nil
 }
 
+func commandMap() error {
+    resp, err := http.Get("https://pokeapi.co/api/v2/location-area/")
+    if err != nil {
+        fmt.Println("error fetching the request...")
+        return nil
+    }
+    defer resp.Body.Close()
+    body, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        fmt.Println("Error in reading response body")
+        return nil
+    }
+    fmt.Println(string(body))
+    return nil
+
+}
+
 func main() {
     // get user input from console
     
@@ -40,6 +59,11 @@ func main() {
             name: "exit",
             description: "quits the REPL",
             callBack: exitCallback,
+        },
+        "map": {
+            name: "map",
+            description: "displays the names of 20 location areas in the Pokemon world",
+            callBack: commandMap,
         },
 
     }
@@ -55,6 +79,9 @@ func main() {
         if input == "exit" {
             command["exit"].callBack()
             return
+        }
+        if input == "map" {
+            command["map"].callBack()
         }
     }
 
