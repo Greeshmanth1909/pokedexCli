@@ -51,7 +51,7 @@ func main() {
         },
 
     }
-
+    
     for true {
         fmt.Print("Pokedex >")
         scanner := bufio.NewScanner(os.Stdin)
