@@ -10,7 +10,7 @@ import (
 type Location struct {
 	Count    int    `json:"count"`
 	Next     string `json:"next"`
-	Previous any    `json:"previous"`
+	Previous string  `json:"previous"`
 	Results  []struct {
 		Name string `json:"name"`
 		URL  string `json:"url"`
@@ -26,6 +26,11 @@ type LocationLog struct {
 func CommandMap() error {
      commandMapHelper(&location)
      return nil
+}
+
+func CommandMapb() error {
+    commandMapbHelper(&location)
+    return nil 
 }
 
 
@@ -58,6 +63,42 @@ func commandMapHelper(p *LocationLog) {
 
     p.Next = location.Next
     p.Previous = next
+
+    results := location.Results
+    for _, value := range results {
+        fmt.Println(value.Name)
+    }
+    return
+}
+
+// Helper for command map back function
+func commandMapbHelper(p *LocationLog) {
+    previous := p.Previous
+
+    if previous == "" {
+        fmt.Println("AT THE STARTING POINT!!!, use map command to explore")
+        return
+    }
+    resp, err := http.Get(previous)
+
+    if err != nil {
+        fmt.Println("Error getting response from url")
+    }
+
+    defer resp.Body.Close()
+    body, err := ioutil.ReadAll(resp.Body)
+
+    if err != nil {
+        fmt.Println("Error in reading response body")
+        return 
+    }
+
+    // Convert byte slice body to json
+    var location Location
+    json.Unmarshal(body, &location)
+
+    p.Next = location.Next
+    p.Previous = location.Previous
 
     results := location.Results
     for _, value := range results {

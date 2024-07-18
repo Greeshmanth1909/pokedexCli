@@ -49,6 +49,11 @@ func main() {
             description: "displays the names of 20 location areas in the Pokemon world",
             callBack: api.CommandMap,
         },
+        "mapb": {
+            name: "mapb",
+            description: "displays the names of previous 20 locations, if there are any",
+            callBack: api.CommandMapb,
+        },
 
     }
     
@@ -66,6 +71,9 @@ func main() {
         }
         if input == "map" {
             command["map"].callBack()
+        }
+        if input == "mapb" {
+            command["mapb"].callBack()
         }
     }
 
