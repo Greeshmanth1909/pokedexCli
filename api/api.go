@@ -4,7 +4,9 @@ import (
     "fmt"
     "net/http"
     "io/ioutil"
+    "time"
     "encoding/json"
+    "github.com/Greeshmanth1909/pokedexCli/pokecache"
 )
 
 type Location struct {
@@ -33,6 +35,10 @@ func CommandMapb() error {
     return nil 
 }
 
+var duration time.Duration = 5 * time.Minute
+
+// Initialise cache
+var cache = pokecache.NewCache(duration)
 
 // A location log struct that tracks urls
 var location = LocationLog{
