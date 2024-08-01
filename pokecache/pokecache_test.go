@@ -39,23 +39,9 @@ func TestReapLoop(t *testing.T) {
     // Add to cache
     input := []byte("there")
     c.Add("hello", input)
-    ticker := time.NewTicker(duration)
-    done := make(chan bool)
     
-    // steup reap loop
-    go func () {
-        for {
-            select {
-                case <- done:
-                    return
-                case <-ticker.C:
-                    c.ReapLoop()
-            }
-        }
-    }()
+    // Wait for some time for the cache to clear
     time.Sleep(2 * time.Minute)
-    ticker.Stop()
-    done <- true
 
     // check cache, it must be empty
     val, ok := c.Get("hello")

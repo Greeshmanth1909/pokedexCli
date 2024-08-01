@@ -21,6 +21,16 @@ type cache struct {
 func NewCache(t time.Duration) *cache {
     cacheMap := make(map[string]cacheEntry)
     currentCache := cache{cacheMap, t, sync.Mutex{}}
+    // Setup reap loop
+    ticker := time.NewTicker(t)
+    go func() {
+        for {
+            select {
+                case <- ticker.C:
+                    currentCache.ReapLoop()
+            }
+        }
+    }()
     return &currentCache
 }
 
