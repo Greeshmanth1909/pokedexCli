@@ -27,13 +27,13 @@ func TestAdd(t *testing.T) {
 
     c.Add("hello", expected)
     actual, _ := c.Get("hello")
-    if bytes.Equal(actual, expected) {
+    if !bytes.Equal(actual, expected) {
         t.Errorf("expected value to be :- %v, got %v", expected, actual)
     }
 }
 
 func TestReapLoop(t *testing.T) {
-    duration := 1 * time.Minute
+    duration := 30 * time.Second
     c := NewCache(duration)
 
     // Add to cache
@@ -41,7 +41,7 @@ func TestReapLoop(t *testing.T) {
     c.Add("hello", input)
     
     // Wait for some time for the cache to clear
-    time.Sleep(2 * time.Minute)
+    time.Sleep(1 * time.Minute)
 
     // check cache, it must be empty
     val, ok := c.Get("hello")

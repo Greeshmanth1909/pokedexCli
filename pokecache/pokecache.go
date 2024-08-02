@@ -45,10 +45,13 @@ func (c *cache) Add(key string, val []byte) error {
         log.Print("Attempted to cache existing entry, ignoring")
         return nil
     }
+
     // Add a new entry to the map
-    entry := c.cacheMap[key]
-    entry.createdAt = time.Now()
-    entry.val = val
+    entry := cacheEntry{
+        createdAt: time.Now(),
+        val: val,
+    }
+    c.cacheMap[key] = entry
 
     log.Print("Cached entry")
     return nil
@@ -61,7 +64,7 @@ func (c *cache) Get(key string) ([]byte, bool) {
     val, ok := c.cacheMap[key]
 
     if !ok {
-        log.Print("current key cannot be accessed")
+        log.Printf("current key cannot be accessed: %v", key)
         return nil, ok
     }
     cachedval := val.val

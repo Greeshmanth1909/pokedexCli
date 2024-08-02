@@ -49,6 +49,15 @@ var location = LocationLog{
 // A helper for the CommandMap function to call the api and keep track of the urls visited
 func commandMapHelper(p *LocationLog) {
     next := p.Next
+    fmt.Println(next)
+
+    // Check if required entry exixts in cache
+    val, ok := cache.Get(next)
+    if ok {
+        fmt.Println(string(val))
+        return 
+    }
+
     resp, err := http.Get(next)
 
     if err != nil {
@@ -71,15 +80,27 @@ func commandMapHelper(p *LocationLog) {
     p.Previous = next
 
     results := location.Results
+    strarr := ""
     for _, value := range results {
         fmt.Println(value.Name)
+        strarr += fmt.Sprintf("%v\n", value.Name)
     }
+
+    // Add to cache
+    cache.Add(next, []byte(strarr))
     return
 }
 
 // Helper for command map back function
 func commandMapbHelper(p *LocationLog) {
     previous := p.Previous
+
+    // Get entry from cache, if it exists
+    val, ok := cache.Get(previous)
+    if ok {
+        fmt.Println(string(val))
+        return
+    }
 
     if previous == "" {
         fmt.Println("AT THE STARTING POINT!!!, use map command to explore")
@@ -107,9 +128,14 @@ func commandMapbHelper(p *LocationLog) {
     p.Previous = location.Previous
 
     results := location.Results
+    strarr := ""
     for _, value := range results {
         fmt.Println(value.Name)
+        strarr += fmt.Sprintf("%v\n", value.Name)
     }
+
+    // Cache new entry
+    cache.Add(previous, []byte(strarr))
+
     return
 }
-
