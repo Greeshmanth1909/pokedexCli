@@ -10,10 +10,10 @@ import (
 type cliCommand struct {
         name string
         description string
-        callBack func() error
+        callBack func(str ...string) error
 }
 
-func helpCallback() error {
+func helpCallback(str ...string) error {
     fmt.Println(`
 Welcome to the Pokedex!
 Usage:
@@ -23,7 +23,7 @@ exit: Exit the Pokedex`)
     return nil
 }
 
-func exitCallback() error {
+func exitCallback(str ...string) error {
     fmt.Println("Exiting...")
     return nil
 }
@@ -53,6 +53,11 @@ func main() {
             name: "mapb",
             description: "displays the names of previous 20 locations, if there are any",
             callBack: api.CommandMapb,
+        },
+        "explore": {
+            name: "explore",
+            description: "displays the names of pokemon present in the given area",
+            callBack: api.Explore,
         },
 
     }
