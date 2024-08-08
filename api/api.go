@@ -7,6 +7,7 @@ import (
     "time"
     "encoding/json"
     "log"
+    "strings"
     "github.com/Greeshmanth1909/pokedexCli/pokecache"
 )
 
@@ -87,6 +88,8 @@ func commandMapHelper(p *LocationLog) {
         strarr += fmt.Sprintf("%v\n", value.Name)
     }
 
+    strarr = strings.TrimSuffix(strarr, "\n")
+
     // Add to cache
     cache.Add(next, []byte(strarr))
     return
@@ -135,6 +138,7 @@ func commandMapbHelper(p *LocationLog) {
         strarr += fmt.Sprintf("%v\n", value.Name)
     }
 
+    strarr = strings.TrimSuffix(strarr, "\n")
     // Cache new entry
     cache.Add(previous, []byte(strarr))
 
@@ -207,6 +211,14 @@ func Explore(areas ...string) error {
     // get area and send request to the api
     area := areas[0]
     currentURL := fmt.Sprintf("%v%v/", baseURL, area)
+
+    // Check weather the required entry already exists in cache
+    val, ok := cache.Get(currentURL)
+    if ok {
+        fmt.Println(string(val))
+        return nil
+    }
+
     resp, err := http.Get(currentURL)
 
     if err != nil {
@@ -225,10 +237,15 @@ func Explore(areas ...string) error {
 
     var explorestr explore
     json.Unmarshal(body, &explorestr)
+    
+    cacheString := ""
 
     // explorestr contains parsed data, extract available pokemon in the area
     for _, str := range explorestr.PokemonEncounters {
         fmt.Println(str.Pokemon.Name)
+        cacheString += fmt.Sprintf("%v\n", str.Pokemon.Name)
     }
+    cacheString = strings.TrimSuffix(cacheString, "\n")
+    cache.Add(currentURL, []byte(cacheString))
     return nil
 }
