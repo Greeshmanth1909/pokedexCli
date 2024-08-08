@@ -4,6 +4,7 @@ import (
     "fmt"
     "bufio"
     "os"
+    "strings"
     "github.com/Greeshmanth1909/pokedexCli/api"
 )
 
@@ -79,6 +80,15 @@ func main() {
         }
         if input == "mapb" {
             command["mapb"].callBack()
+        }
+        // extract multiple inputs, if any
+        inputs := strings.Fields(input)
+        if inputs[0] == "explore" {
+            if len(inputs) != 2 {
+                fmt.Println("Please enter a city to explore, explore <city-name>")
+                continue
+            }
+            command["explore"].callBack(inputs[1])
         }
     }
 

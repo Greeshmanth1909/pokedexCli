@@ -196,10 +196,10 @@ type explore struct {
 }
 
 // Explore function all the pokemon present in a given area
-func Explore(areas ...string) {
+func Explore(areas ...string) error {
     if len(areas) != 1 {
         fmt.Println("Please specify area to explore")
-        return
+        return nil
     }
     
     baseURL := "https://pokeapi.co/api/v2/location-area/"
@@ -211,7 +211,7 @@ func Explore(areas ...string) {
 
     if err != nil {
         log.Print("Error while processing explore request to the api, try again")
-        return
+        return nil
     }
 
     // Access json body and unmarshall it
@@ -220,7 +220,7 @@ func Explore(areas ...string) {
 
     if err != nil {
         fmt.Println("Unable to parse json")
-        return
+        return nil
     }
 
     var explorestr explore
@@ -230,4 +230,5 @@ func Explore(areas ...string) {
     for _, str := range explorestr.PokemonEncounters {
         fmt.Println(str.Pokemon.Name)
     }
+    return nil
 }
