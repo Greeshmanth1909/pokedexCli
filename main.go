@@ -60,6 +60,11 @@ func main() {
             description: "displays the names of pokemon present in the given area",
             callBack: api.Explore,
         },
+        "catch": {
+            name: "catch",
+            description: "catches a given pokemon base on a random chance seeded by the pokemon's base experience",
+            callBack: api.Catch,
+        },
 
     }
     
@@ -89,6 +94,13 @@ func main() {
                 continue
             }
             command["explore"].callBack(inputs[1])
+        }
+        if inputs[0] == "catch" {
+            if len(inputs) != 2 {
+                fmt.Println("Please enter a pokemon to catch, catch <catch-name>")
+                continue
+            }
+            command["catch"].callBack(inputs[1])
         }
     }
 

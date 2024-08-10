@@ -249,3 +249,31 @@ func Explore(areas ...string) error {
     cache.Add(currentURL, []byte(cacheString))
     return nil
 }
+
+/* The catch function gets information about a given pokemon, determines how easy it is to catch it based
+on the "base experience" stat and adds the pokemon to the user's pokedex if its caught */
+func Catch(pokemon ...string) error {
+    baseURL := "https://pokeapi.co/api/v2/pokemon/"
+    currentURL := fmt.Sprintf("%v%v", baseURL, pokemon[0])
+    
+    resp, err := http.Get(currentURL)
+
+    if err != nil {
+        fmt.Println("Error while processing get request, please try again")
+        return nil
+    }
+
+    defer resp.Body.Close()
+    
+    data, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        fmt.Println("Unable to parse response body")
+        return nil
+    }
+
+    // data is a byte array, unmarshall it
+    var pokestruct Pokemon
+    json.Unmarshal(data, &pokestruct)
+    fmt.Println(pokestruct.BaseExperience)
+    return nil
+}
