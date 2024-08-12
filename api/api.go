@@ -4,6 +4,7 @@ import (
     "fmt"
     "net/http"
     "io/ioutil"
+    "math/rand"
     "time"
     "encoding/json"
     "log"
@@ -145,8 +146,6 @@ func commandMapbHelper(p *LocationLog) {
     return
 }
 
-
-
 // Explore function all the pokemon present in a given area
 func Explore(areas ...string) error {
     if len(areas) != 1 {
@@ -222,6 +221,40 @@ func Catch(pokemon ...string) error {
     // data is a byte array, unmarshall it
     var pokestruct Pokemon
     json.Unmarshal(data, &pokestruct)
-    fmt.Println(pokestruct.BaseExperience)
+
+    baseXp := pokestruct.BaseExperience
+    num := rand.Intn(baseXp)
+    fmt.Println("Catching", pokemon[0])
+
+    pokedex := make(map[string]Pokemon)
+    
+    // the pokemon will be caught if the random number generated is in the range of ten numbers in the middle of [0, baseXp)
+    lowerLimit := baseXp / 2
+    upperLimit := lowerLimit + 10
+
+    // if baseXp of pokemon is less than 10, catch it on the first attempt
+    if baseXp <= 20 {
+        fmt.Println("caught", pokemon[0])
+        addPokemon(&pokedex, pokemon[0], pokestruct)
+        return nil
+    }
+    
+    if num >= lowerLimit && num < upperLimit {
+        fmt.Println("caught", pokemon[0])
+        addPokemon(&pokedex, pokemon[0], pokestruct)
+        return nil
+    }else {
+        fmt.Println(pokemon[0], "escaped!")
+    }
     return nil
+}
+
+// addPokemon function adds a given pokemon to the user's pokedex
+func addPokemon(p *map[string]Pokemon, name string, data Pokemon) {
+    _, ok := (*p)[name]
+    if ok {
+        fmt.Printf("Pokemon %v has already been caught before", name)
+        return
+    }
+    (*p)[name] = data
 }
