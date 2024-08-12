@@ -65,6 +65,11 @@ func main() {
             description: "catches a given pokemon base on a random chance seeded by the pokemon's base experience",
             callBack: api.Catch,
         },
+        "inspect": {
+            name: "inspect",
+            description: "shows statistics about a pokemon in a pokedex",
+            callBack: api.Inspect,
+        },
 
     }
     
@@ -101,6 +106,13 @@ func main() {
                 continue
             }
             command["catch"].callBack(inputs[1])
+        }
+        if inputs[0] == "inspect" {
+            if len(inputs) != 2 {
+                fmt.Println("Please enter a pokemon to inspect, inspect <pokemon-name>")
+                continue
+            }
+            command["inspect"].callBack(inputs[1])
         }
     }
 

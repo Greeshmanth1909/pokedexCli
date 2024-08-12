@@ -197,6 +197,9 @@ func Explore(areas ...string) error {
     return nil
 }
 
+// Global declaration of pokedex for the catch and inspect functions
+var pokedex = make(map[string]Pokemon)
+
 /* The catch function gets information about a given pokemon, determines how easy it is to catch it based
 on the "base experience" stat and adds the pokemon to the user's pokedex if its caught */
 func Catch(pokemon ...string) error {
@@ -226,8 +229,6 @@ func Catch(pokemon ...string) error {
     num := rand.Intn(baseXp)
     fmt.Println("Catching", pokemon[0])
 
-    pokedex := make(map[string]Pokemon)
-    
     // the pokemon will be caught if the random number generated is in the range of ten numbers in the middle of [0, baseXp)
     lowerLimit := baseXp / 2
     upperLimit := lowerLimit + 10
@@ -257,4 +258,25 @@ func addPokemon(p *map[string]Pokemon, name string, data Pokemon) {
         return
     }
     (*p)[name] = data
+}
+
+// Inspect function prints information about a given pokemon to the console
+func Inspect(pokemon ...string) error{
+    val, ok := pokedex[pokemon[0]]
+    if !ok {
+        fmt.Printf("Pokemon %v not registered in the pokedex, catch the pokemon to add it to your pokedex")
+        return nil
+    }
+    fmt.Printf("Name: %v\n", val.Name)
+    fmt.Printf("Height: %v\n", val.Height)
+    fmt.Printf("Weight: %v\n", val.Weight)
+    fmt.Printf("Stats:\n")
+    for _, stat := range val.Stats {
+        fmt.Printf("    %v- %v\n", stat.Stat.Name, stat.BaseStat)
+    }
+    fmt.Println("Types:")
+    for _, tp := range val.Types {
+       fmt.Printf("    -%v\n", tp.Type.Name) 
+    }
+    return nil
 }
