@@ -70,6 +70,11 @@ func main() {
             description: "shows statistics about a pokemon in a pokedex",
             callBack: api.Inspect,
         },
+        "pokedex": {
+            name: "pokedex",
+            description: "prints all pokemon the user caught to the standard output",
+            callBack: api.Pokedex,
+        },
 
     }
     
@@ -113,6 +118,9 @@ func main() {
                 continue
             }
             command["inspect"].callBack(inputs[1])
+        }
+        if input == "pokedex" {
+            command["pokedex"].callBack()
         }
     }
 

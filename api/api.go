@@ -280,3 +280,16 @@ func Inspect(pokemon ...string) error{
     }
     return nil
 }
+
+// Pokedex function prints all the pokemon in the users's pokedex to the console
+func Pokedex(p ...string) error {
+    if len(pokedex) <= 0 {
+        fmt.Println("No pokemon yet!")
+        return nil
+    }
+    fmt.Println("Your Pokemon:")
+    for key := range pokedex {
+        fmt.Printf("    -%v\n", key)
+    }
+    return nil
+}
