@@ -28,5 +28,12 @@ exit|Quits the game|`Pokedex >exit`
 map|Displays the names of the next 20 locations in the pokemon world|`Pokedex >map`
 mapb|Displays the names of the previous 20 locations in the pokemon world, if there are any|`Pokedex >mapb`
 explore|Displays the names of the pokemon present in the provided area|`Pokedex >explore <area-name>`
+catch|Attempts to catch a pokemon, the chance of a successful catch depends on the `base_experience` of a pokemon. Higher the `base_xp` the harder it is to catch.| `Pokedex >catch <pokemon-name>`
+inspect|Shows important statistics of a caught pokemon|`Pokedex >inspect <pokemon-name>`
+pokedex|Displays all the pokemon the user caught|`Pokedex >pokedex`
 
 
+## Technicals
+### API
+### Caching
+### Unit Tests
