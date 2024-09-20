@@ -34,6 +34,9 @@ pokedex|Displays all the pokemon the user caught|`Pokedex >pokedex`
 
 
 ## Technicals
+
 ### API
+The program connects to the [pokeApi](https://pokeapi.co/) to fetct the necessary resources
+
 ### Caching
-### Unit Tests
+The program caches fetched resources in memory for 5 minutes to improve performance
